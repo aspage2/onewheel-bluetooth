@@ -116,3 +116,7 @@ dmypy.json
 
 # PyCharm
 .idea/
+const.py
+*.pcapng
+report*/
+venv/
