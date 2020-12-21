@@ -1,26 +1,26 @@
 # onewheel-bluetooth
-A python bluetooth data reader for the Onewheel (supporting Gemini firmware).
-This is meant to be a quick and dirty example of how to connect and obtain data from the board.
 
-## Usage
+Provides some python helpers for prototyping BLE applications.
 
-Just run it with your board's address as the first paramater:
+### Unlocking
 
-```
-python3 readdata.py XX:XX:XX:XX:XX:XX
-```
+The unlock sequence is implemented in `onewheel.utils.unlock_gatt_sequence`.
+The routine mimics what I found from sniffing bluetooth logs from the official android
+app.
+This method was only tested on my particular wheel: 
+`OW+ XR, Hardware: 4212, Firmware: Gemini 4153`
 
-You should get output like the following:
+ * App reads `UUIDs.RidingMode`, a 0 value indicates the firmware is locked.
+ * App unsubscribes from `UUIDs.UartSerialRead`
+ * App subscribes to `UUIDs.RidingMode` and `UUIDs.LightingMode` characteristics.
+ * App writes a secret to `UUIDs.UartSerialWrite`.
+ * Wait for `RidingMode` and `LightingMode` characteristics to push their values
+   via notification.
 
-```
-Requesting encryption key...
-Waiting for encryption key...
-Sending unlock key...
-Reading Onewheel status:
-Battery Remaining: 100%
-Lifetime Odometer: 57 Miles
-Trip Odometer: 0 Miles
-```
+Once the device is unlocked, it can be kept unlocked by periodically sending one
+zero-byte to `UUIDs.SpeedRpm`.
 
 ### Credits
+UUID list and ble connection forked from https://github.com/kariudo/onewheel-bluetooth.
+
 Thanks to [@beeradmoore](https://github.com/beeradmoore) for figuring out the md5 chunks for the serial stream reasponse via the ponewheel issue: https://github.com/ponewheel/android-ponewheel/issues/86#issuecomment-440809066
