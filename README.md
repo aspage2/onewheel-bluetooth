@@ -1,6 +1,14 @@
 # onewheel-bluetooth
 
-Provides some python helpers for prototyping BLE applications.
+Provides some python helpers for prototyping BLE applications for the Onewheel.
+
+### Usage
+
+The helpers in `onewheel.utils` should help you quickly get something which talks to your wheel.
+
+You first need to find your device's MAC address and the "secret" used in unlocking the board. I did both by capturing bluetooth HCI logs from the official android app. Once you [enable HCI logs](https://fte.com/WebHelpII/Sodera/Content/Documentation/WhitePapers/BPA600/Encryption/GettingAndroidLinkKey/RetrievingHCIlog.htm) in Android, you can open the official OW app, ride your wheel for a moment, then generate an android bug report, which contains the bluetooth logs.
+
+If you look in the logs for a `Write Request` for `UUIDs.UartSerialWrite`, the value logged is the "secret" to supply to this project's unlock sequence.
 
 ### Unlocking
 
